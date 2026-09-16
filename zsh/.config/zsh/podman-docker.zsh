@@ -22,15 +22,15 @@ podman_docker_configure() {
   if [[ -n "${running_machine}" ]]; then
     machine="${running_machine}"
   elif ! podman machine inspect "${machine}" >/dev/null 2>&1; then
-    if ! podman machine init --memory 4096 "${machine}" >/dev/null; then
+    if ! podman machine init --memory 8192 "${machine}" >/dev/null; then
       print -u2 "podman-docker: could not create ${machine}"
       return 0
     fi
   else
     memory="$(podman machine inspect "${machine}" --format '{{.Resources.Memory}}' 2>/dev/null)"
-    if [[ "${memory}" =~ '^[0-9]+$' ]] && (( memory < 4096 )); then
-      if ! podman machine set --memory 4096 "${machine}" >/dev/null; then
-        print -u2 "podman-docker: could not set ${machine} memory to 6144 MiB"
+    if [[ "${memory}" =~ '^[0-9]+$' ]] && (( memory < 8192 )); then
+      if ! podman machine set --memory 8192 "${machine}" >/dev/null; then
+        print -u2 "podman-docker: could not set ${machine} memory to 8192 MiB"
         return 0
       fi
     fi
